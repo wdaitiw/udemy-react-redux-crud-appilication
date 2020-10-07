@@ -1,3 +1,5 @@
+action//型を持つ
+
 export const INCREMENT = 'INCREMENT'//外で使えるようにexportする
 export const DECREMENT = "DECREMENT"
 
