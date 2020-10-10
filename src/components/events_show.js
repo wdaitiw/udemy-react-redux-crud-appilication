@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Field, reduxForm } from 'redux-form'
 import { Link } from 'react-router-dom'
-import { getEvents, deleteEvent, putEvent } from '../actions'
+import { getEvent, deleteEvent, putEvent } from '../actions'
 
 class EventsShow extends Component {
     constructor(props) {
@@ -11,6 +11,14 @@ class EventsShow extends Component {
         this.onSubmit = this.onSubmit.bind(this)
         this.onDeleteClick = this.onDeleteClick.bind(this)
     }
+
+    componentDidMount() {
+        const { id } = this.props.match.params
+        if (id) this.props.getEvent(id)//idがある場合は
+    }
+
+
+
     renderField(field) {
         const { input, label, type, meta: { touched, error } } = field
         return (
@@ -28,7 +36,7 @@ class EventsShow extends Component {
     }
 
     async onSubmit(values) {
-        // await this.props.postEvents(values)
+        await this.props.putEvent(values)
         this.props.history.push('/')
         // propsにhistoryが存在するのは、react-router-domライブラリからimportしているRouteコンポーネントで描画されたコンポーネントでは、
         // propsにhistoryが組み込まれるためです。逆に、このようにしないとhistoryオブジェクトは渡ってきません。
@@ -38,7 +46,7 @@ class EventsShow extends Component {
     render() {
         //pristine何も入力していない状態だとtrue
         //submitting一回submitを押すまではfalse
-        const { handleSubmit, pristine, submitting } = this.props
+        const { handleSubmit, pristine, submitting, invalid } = this.props
         return (
             <React.Fragment>
                 <form onSubmit={handleSubmit(this.onSubmit)}>
@@ -52,7 +60,7 @@ class EventsShow extends Component {
                         <Field label="Bodd" name="body" type="text" component={this.renderField} />
                     </div>
                     <div>
-                        <input type="submit" value="Submit" disabled={pristine || submitting} />
+                        <input type="submit" value="Submit" disabled={pristine || submitting || invalid} />
                         <Link to="/">Cancel</Link>
                         <Link to="/" onClick={this.onDeleteClick}>Delete</Link>
                     </div>
@@ -62,7 +70,11 @@ class EventsShow extends Component {
     }
 }
 
-const mapDispatchToProps = ({ deleteEvent })
+const mapStateToProps = (state, ownProps) => {
+    const event = state.events[ownProps.match.params.id]
+    return { initialValues: event }
+}
+const mapDispatchToProps = ({ deleteEvent, getEvent, putEvent })
 
 //エラー処理
 const validate = value => {
@@ -72,6 +84,6 @@ const validate = value => {
     return errors
 }
 
-export default connect(null, mapDispatchToProps)(
-    reduxForm({ validate, form: 'eventShowForm' })(EventsShow)
+export default connect(mapStateToProps, mapDispatchToProps)(
+    reduxForm({ validate, form: 'eventShowForm', enableReinitialize: true })(EventsShow)
 )
