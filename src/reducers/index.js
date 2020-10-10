@@ -1,6 +1,6 @@
 //アプリに存在する全てのreducer をここに記載する
 import { combineReducers } from 'redux'
+import { reducer as form } from 'redux-form'
 import events from './events'
 
-export default combineReducers({ events })
-//export default comnbineReducers({foo,bar})
+export default combineReducers({ events, form })
