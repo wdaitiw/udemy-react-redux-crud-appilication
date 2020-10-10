@@ -5,8 +5,10 @@ import { Provider } from 'react-redux' //createSroreを全コンポーネント�
 import './index.css';
 import reducer from './reducers'
 import EventsIndex from './components/events_index';
+import EventsNew from './components/events_new';
 import * as serviceWorker from './serviceWorker';
 import thunk from 'redux-thunk' //actionの代わりに関数を返せるようになる。
+import { Route, BrowserRouter, Switch } from 'react-router-dom'
 
 const store = createStore(reducer, applyMiddleware(thunk)) //ここでつくられるstoreはこのアプリ上で唯一になる。
 
@@ -14,7 +16,12 @@ const store = createStore(reducer, applyMiddleware(thunk)) //ここでつくら�
 ReactDOM.render(
   <React.StrictMode>
     <Provider store={store}>
-      <EventsIndex />
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={EventsIndex} />
+          <Route exact path="/events/new" component={EventsNew} />
+        </Switch>
+      </BrowserRouter>
     </Provider>
   </React.StrictMode>,
   document.getElementById('root')

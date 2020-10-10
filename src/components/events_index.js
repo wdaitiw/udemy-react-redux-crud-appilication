@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { readEvents } from '../actions'
 import _ from 'lodash'
+import { Link } from 'react-router-dom'
 
 class EventsIndex extends Component {
   componentDidMount() {
@@ -9,7 +10,7 @@ class EventsIndex extends Component {
     this.props.readEvents()
   }
   renderEvents() {
-    return _.map(this.props.events, event => (
+    return _.map(this.props.events, event => ( //eventはなんでもいい
       <tr key={event.id}>
         <td>{event.id}</td>
         <td>{event.title}</td>
@@ -34,6 +35,8 @@ class EventsIndex extends Component {
             {this.renderEvents()}
           </tbody>
         </table>
+
+        <Link to="/events/new">New Event</Link>
         <div>
           {console.log(props.events)}
         </div>
@@ -41,7 +44,7 @@ class EventsIndex extends Component {
     )
   }
 }
-const mapStateToProps = state => ({ events: state.events })
+const mapStateToProps = state => ({ events: state.events })//state.eventsはevents.jsで定義されているeventsと同等
 // const mapDispatchToProps = dispatch => ({
 //   increment: () => dispatch(increment()),
 //   decrement: () => dispatch(decrement())
