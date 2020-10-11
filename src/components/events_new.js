@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { postEvent } from '../actions'
 import { Field, reduxForm } from 'redux-form'
 import { Link } from 'react-router-dom'
+import RaisedButton from 'material-ui/RaisedButton'
+import TextField from 'material-ui/TextField'
 
 class EventsNew extends Component {
     constructor(props) {
@@ -12,11 +14,14 @@ class EventsNew extends Component {
     renderField(field) {
         const { input, label, type, meta: { touched, error } } = field
         return (
-            <div>
-                <input {...input} placeholder={label} type={type} />
-                {touched && error && <span>{error}</span>}
-                {/*一回でも触ったら validate処理を実行 */}
-            </div>
+            <TextField
+                hintText={label}
+                floatingLabelText={label}
+                type={type}
+                errorText={touched && error}
+                {...input}
+                fullWidth={true}
+            />
         )
     }
 
@@ -32,6 +37,9 @@ class EventsNew extends Component {
         //pristine何も入力していない状態だとtrue
         //submitting一回submitを押すまではfalse
         const { handleSubmit, pristine, submitting, invalid } = this.props
+
+        const style = { margin: 12 }
+
         return (
             <React.Fragment>
                 <form onSubmit={handleSubmit(this.onSubmit)}>
@@ -45,8 +53,8 @@ class EventsNew extends Component {
                         <Field label="Bodd" name="body" type="text" component={this.renderField} />
                     </div>
                     <div>
-                        <input type="submit" value="Submit" disabled={pristine || submitting || invalid} />
-                        <Link to="/">Cancel</Link>
+                        <RaisedButton label="Submit" type="submit" style={style} disabled={pristine || submitting || invalid} />
+                        <RaisedButton label="Cancel" style={style} containerElement={<Link to="/" />} />
                     </div>
                 </form>
             </React.Fragment>
