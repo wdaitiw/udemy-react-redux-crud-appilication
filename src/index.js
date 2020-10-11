@@ -11,6 +11,7 @@ import * as serviceWorker from './serviceWorker';
 import thunk from 'redux-thunk' //actionの代わりに関数を返せるようになる。
 import { Route, BrowserRouter, Switch } from 'react-router-dom'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 //development環境においてはredux-devtools-extensionでデバックできるようにする
 const enchancer = process.env.NODE_ENV === 'development' ?
@@ -20,16 +21,18 @@ const store = createStore(reducer, enchancer) //ここでつくられるstoreは
 
 
 ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <Switch>
-        <Route exact path="/" component={EventsIndex} />
-        <Route exact path="/events" component={EventsShow} />
-        <Route path="/events/new" component={EventsNew} />
-        <Route path="/events/:id" component={EventsShow} />
-      </Switch>
-    </BrowserRouter>
-  </Provider>,
+  <MuiThemeProvider>
+    <Provider store={store}>
+      <BrowserRouter>
+        <Switch>
+          <Route exact path="/" component={EventsIndex} />
+          <Route exact path="/events" component={EventsShow} />
+          <Route path="/events/new" component={EventsNew} />
+          <Route path="/events/:id" component={EventsShow} />
+        </Switch>
+      </BrowserRouter>
+    </Provider>
+  </MuiThemeProvider>,
   document.getElementById('root')
 );
 
